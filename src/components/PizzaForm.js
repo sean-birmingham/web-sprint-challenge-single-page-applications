@@ -17,8 +17,11 @@ const initialValues = {
 
 const PizzaForm = ({ submit }) => {
   const [formValues, setFormValues] = useState(initialValues);
-
-  const [errors, setErrors] = useState({ name: '' });
+  const [errors, setErrors] = useState({
+    name: '',
+    size: '',
+    instructions: ''
+  });
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +87,7 @@ const PizzaForm = ({ submit }) => {
             <option value='Large'>Large</option>
             <option value='Extra-Large'>Extra-Large</option>
           </select>
+          {errors.size}
         </label>
         <h3>Add Toppings</h3>
         <label>

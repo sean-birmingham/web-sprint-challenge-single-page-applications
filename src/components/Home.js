@@ -10,23 +10,6 @@ const Home = ({ order }) => {
       <Link to='/pizza'>
         <button>Pizza?</button>
       </Link>
-      {order ? (
-        <div>
-          <h3>Name: {order.name}</h3>
-          <p>Size: {order.size}</p>
-          {!!order.toppings && !!order.toppings.length && (
-            <div>
-              Toppings:
-              <ul>
-                {order.toppings.map((topping, index) => (
-                  <li key={index}>{topping}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <p>Instructions: {order.instructions}</p>
-        </div>
-      ) : null}
     </div>
   );
 };

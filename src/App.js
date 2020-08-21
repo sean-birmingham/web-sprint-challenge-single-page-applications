@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Home from './components/Home';
 import PizzaForm from './components/PizzaForm';
+import OrderComplete from './components/OrderComplete';
 
 const App = () => {
   const [order, setOrder] = useState(null);
+  let history = useHistory();
 
   const submit = (values) => {
     axios
       .post('https://reqres.in/api/users', values)
       .then((res) => {
-        console.log(values);
-        console.log(res.data);
         setOrder(res.data);
+        history.push('/order');
       })
       .catch((err) => {
-        debugger;
+        console.log(err);
       });
   };
 
@@ -24,10 +26,13 @@ const App = () => {
     <>
       <Switch>
         <Route exact path='/'>
-          <Home order={order} />
+          <Home />
         </Route>
         <Route path='/pizza'>
-          <PizzaForm submit={submit} />
+          <PizzaForm order={order} submit={submit} />
+        </Route>
+        <Route path='/order'>
+          {order ? <OrderComplete order={order} /> : <Redirect to='/' />}
         </Route>
       </Switch>
     </>

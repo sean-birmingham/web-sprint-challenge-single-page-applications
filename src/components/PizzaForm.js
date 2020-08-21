@@ -1,24 +1,43 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
+import * as yup from 'yup';
+import formSchema from './formSchema';
+
+const initialValues = {
+  name: '',
+  size: '',
+  toppings: {
+    pepperoni: false,
+    sausage: false,
+    onions: false,
+    extracheese: false
+  },
+  instructions: ''
+};
 
 const PizzaForm = ({ submit }) => {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    size: '',
-    toppings: {
-      pepperoni: false,
-      sausage: false,
-      onions: false,
-      extracheese: false
-    },
-    instructions: ''
-  });
+  const [formValues, setFormValues] = useState(initialValues);
 
-  const onChange = (e) =>
+  const [errors, setErrors] = useState({ name: '' });
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+
+    yup
+      .reach(formSchema, name)
+      .validate(value)
+      .then(() => {
+        setErrors({ ...errors, [name]: '' });
+      })
+      .catch((err) => {
+        setErrors({ ...errors, [name]: err.errors[0] });
+      });
+
     setFormValues({
       ...formValues,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+  };
 
   const onCheckboxChange = (e) =>
     setFormValues({
@@ -52,6 +71,7 @@ const PizzaForm = ({ submit }) => {
             onChange={onChange}
             value={formValues.name}
           />
+          {errors.name}
         </label>
         <label>
           Choice of Size:&nbsp;
